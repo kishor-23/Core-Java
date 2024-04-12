@@ -1,6 +1,8 @@
 package com.chainsys.day4;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Game {
 
@@ -28,6 +30,14 @@ public class Game {
 			return 4;
 		}
 	}
+	public static boolean isname(String name) {
+		 //only letters
+		 String regEx = "^[a-zA-Z]+$";
+		 Pattern p=Pattern.compile(regEx);
+	        Matcher m=p.matcher(name);	        
+	       return m.matches();
+		 
+	 }
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
@@ -38,10 +48,15 @@ public class Game {
 		boolean gameOver = false;
 		int score = 0;
 		int levelCompleted = 0;
-		int bonus = 10;
+		int bonus = 0;
 		System.out.println("Quiz game...");
-		System.out.print("Enter your name: ");
-		String name = sc.next();
+		System.out.println("Enter your name :");
+		String name=sc.next();
+		while(!isname(name)) {
+			System.out.println("invalid: Enter only letters");
+			 name=sc.next();
+		}
+        System.out.println();
 
 		String[] questions = { "Is Java platform-independent?", "Is Java case-sensitive?",
 				"Are arrays in Java fixed in size once they are created?" };
@@ -58,13 +73,12 @@ public class Game {
 		        	System.out.println(questions[i]);
 		    		ans=sc.next();
 		      }
-			// Convert input to lowercase for case-insensitive comparison
-
+	
 		
-			if (ans.equals(correctAnswers[i])) {
+			if (ans.equalsIgnoreCase(correctAnswers[i])) {
 				System.out.println("Correct!");
 				score += 200;
-				bonus += 10;
+				bonus += 100;
 				levelCompleted++;
 				System.out.println("Your score: " + score + ", Level Completed: " + levelCompleted);
 			} else {
@@ -75,11 +89,10 @@ public class Game {
 			}
 
 		}
-        if(gameOver) {
-        	bonus=0;
-        }
-        else {
-        	bonus=300;
+		
+        if(!gameOver) {
+     
+        	bonus+=400;
         }
 		// Display final high score position
 		int finalScore = score + bonus;

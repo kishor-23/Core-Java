@@ -42,7 +42,6 @@ public class StringDemo {
         String trimmedString = stringWithWhitespaces.trim();
         System.out.println("Trimmed string:" + trimmedString);
 
-
         String replacedString = str.replace("o", "0");
         System.out.println("String with 'o' replaced by '0': " + replacedString);
  

@@ -8,6 +8,7 @@ public class Validate {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		int n=0;
+		System.out.println("enter a number");
   	  while (sc.hasNext()) {  
             //If the next is a int, correct input
               if (sc.hasNextInt()) {  

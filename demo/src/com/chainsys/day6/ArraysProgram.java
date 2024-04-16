@@ -37,7 +37,7 @@ public class ArraysProgram {
         int[] array2 = {1, 2, 3};
         boolean equalArrays = Arrays.equals(array1, array2);
         System.out.println("Arrays are equal: " + equalArrays);
-        Random random=new Random(1000);
+        Random random=new Random();
         System.out.println("random number in array :"+array1[random.nextInt(array1.length)]);
                 
 

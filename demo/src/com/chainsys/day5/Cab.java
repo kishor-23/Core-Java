@@ -2,8 +2,24 @@ package com.chainsys.day5;
 
 public class Cab {
 
-	public String type;
-	public double price;
+	 String type;
+	 double price;
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
 	Cab(String type, double price) {
 

@@ -36,7 +36,7 @@ public class CabFare {
 		int i = 0;
 		for (Cab c : cabs) {
 			i++;
-			System.out.println(i + " " + c.type + "  : price per kiloMeter :" + c.price);
+			System.out.println(i + " " + c.getType() + "  : price per kiloMeter :" + c.getPrice());
 		}
 		System.out.println();
 		System.out.println("we have Discount :\n" + "  2% discount for tota1 fare amount greater than 2000\n"

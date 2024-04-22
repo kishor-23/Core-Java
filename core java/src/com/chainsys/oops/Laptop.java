@@ -1,8 +1,14 @@
 package com.chainsys.oops;
 
-public class Laptop {
+//An abstract class is a class that is declared abstract 
+//it may or may not include abstract methods. 
+//Abstract classes cannot be instantiated
+public abstract class Laptop {
    private String brand;
    private double price;
+   //abstract method
+   public  abstract String describe() ;
+   
 public String getBrand() {
 	return brand;
 }
@@ -16,13 +22,14 @@ public void setPrice(double price) {
 	this.price = price;
 }
 
-public String describe() {
-	return "Laptop [brand=" + brand + ", price=" + price + "]";
-}
+
+
+
 public Laptop(String brand, double price) {
-	super();
+
 	this.brand = brand;
 	this.price = price;
 }
+
   
 }

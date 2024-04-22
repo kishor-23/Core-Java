@@ -1,7 +1,14 @@
 package com.chainsys.oops;
 
-public class Movie {
+//interface
+//An interface is a completely "abstract class"
+//only abstract methods
+interface Movie{  
+	String displayMovieDetails();
+}
 
+
+public class ImplMovie implements Movie{
 	int id;
 	static int c=1;
 	int rating;
@@ -32,18 +39,18 @@ public class Movie {
 	public void setReview(String review) {
 		this.review = review;
 	}
-	public Movie( String name,int rating, String review) {
+	public ImplMovie( String name,int rating, String review) {
 		
 		this.id = c++;
 		this.rating = rating;
 		this.name = name;
 		this.review = review;
 	}
-	public Movie() {
+	public ImplMovie() {
 	   id = c++;
 	}
 	@Override
-	public String toString() {
+	public String displayMovieDetails() {
 		return "Movie [id=" + id + ", rating=" + rating + ", name=" + name + ", review=" + review + "]";
 	}
 	

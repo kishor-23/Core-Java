@@ -20,9 +20,12 @@ public class Lenovo extends Laptop {
 	public void setModel(String model) {
 		this.model = model;
 	}
-
+	@Override
 	public String describe() {
 		return "Laptop [brand= " +  getBrand() + " , model= " + model + ", price=" + getPrice()+ "]";
 	}
+
+	
+	
 
 }

@@ -1,7 +1,8 @@
 package com.chainsys.day8april22task;
 
-
-
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,23 +16,34 @@ public class Validation {
 		return m.matches();
 
 	}
-	public static boolean isMonthYear(String s) {
-		// only letters
-		  String regex = "^(?:jan|feb|mar|april|may|june|july|aug|sept|oct|nov|dec)(?:\\d{4})$";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(s);
-		return m.matches();
 
+	public static Date getDate() {
+		Date date = null;
+		boolean validDate = false;
+		Scanner sc = new Scanner(System.in);
+		while (!validDate) {
+			System.out.println("Enter date dd-mm-yyyy:");
+			String dateInput = sc.next();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+			try {
+				date = dateFormat.parse(dateInput);
+				validDate = true; // Set validDate to true if parsing succeeds
+			} catch (ParseException e) {
+				System.out.println("Invalid date format. Please enter date in dd-mm-yyyy format.");
+			}
+		}
+	
+		return date;
 	}
-    public static boolean isPhoneNumber(String phoneNumber) {
-        // Phone number pattern: accepts 10 digits, optionally separated by hyphens
-        String regEx = "^\\d{10}$";
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(phoneNumber);
-        return m.matches();
-    }
-  
 
+	public static boolean isPhoneNumber(String phoneNumber) {
+		// Phone number pattern: accepts 10 digits, optionally separated by hyphens
+		String regEx = "^\\d{10}$";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(phoneNumber);
+		return m.matches();
+	}
 
 	public static int getPositiveInput(Scanner scanner) {
 		int n = 0;
@@ -51,4 +63,3 @@ public class Validation {
 	}
 
 }
-

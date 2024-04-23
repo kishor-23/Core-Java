@@ -34,8 +34,8 @@ public class Validation {
 		while (scanner.hasNext()) {
 			if (scanner.hasNextInt()) {
 				n = scanner.nextInt();
-				if (n < 0) {
-					System.out.println("Enter only positive numbers. " + n + " is negative.");
+				if (n <= 0) {
+					System.out.println("Enter only positive numbers. " + n + " is not a positive number");
 				} else {
 					break;
 				}

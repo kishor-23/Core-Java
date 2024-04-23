@@ -11,8 +11,6 @@ public class TestDemo {
 		// TODO Auto-generated method stub
 		Scanner sc = new Scanner(System.in);
 		Movie m1 = new ImplMovie("spider man", 4, "good movie");
-	
-
 		ImplMovie m2 = new ImplMovie();
 	
 	//	System.out.println("Movie class ..");

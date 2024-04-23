@@ -1,10 +1,6 @@
 package com.chainsys.oops;
 
 public class Lenovo extends Laptop {
-//	public Lenovo(String brand, double price) {
-//		super(brand, price);
-//		// TODO Auto-generated constructor stub
-//	}
 
 	private String model;
 
@@ -12,7 +8,9 @@ public class Lenovo extends Laptop {
 		super("lenovo", price);
 		this.model = model;
 	}
-
+    public Lenovo() {
+    	
+    }
 	public String getModel() {
 		return model;
 	}

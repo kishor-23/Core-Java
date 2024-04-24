@@ -33,8 +33,25 @@ public class Validation {
 				System.out.println("Invalid date format. Please enter date in dd-mm-yyyy format.");
 			}
 		}
-	
+
 		return date;
+	}
+
+	public static boolean isMailVaild(String mail) {
+		String regEx = "^[a-z0-9]+[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]{2,}$";
+		// Pattern.matches(regEx, mail);
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(mail);
+		return m.matches();
+	}
+
+	public static boolean isValidPassword(String password) {
+		// Check minimum length 6
+		String regEx = "(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.])(?=.*\\d).{5,}";
+
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(password);
+		return m.matches();
 	}
 
 	public static boolean isPhoneNumber(String phoneNumber) {

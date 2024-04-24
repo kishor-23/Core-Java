@@ -11,21 +11,23 @@ public class PayrollApp {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		ArrayList<Employee> employees = new ArrayList<>();
+		employees.add(new Employee("mani","it",12000));
 		ArrayList<Payment> payments = new ArrayList<>();
-		//Date date=Validation.getDate();
 
 		System.out.println("*** Payroll Application ***");
 		System.out.println("1. Add Employee");
 		System.out.println("2. Display Employee Details");
 		System.out.println("3. Add Payroll by Employee ID");
 		System.out.println("4. Display Payrolls");
-		System.out.println("5. Exit");
+		System.out.println("5. Display Payrolls by Employee ID");
+		System.out.println("6. Display Payrolls by date");
+		System.out.println("7. Exit");
 		System.out.println("--------------------------");
 		System.out.println();
 
 		while (true) {
-			System.out.println("Choose an option (1, 2, 3, 4, 5):");
-			int opt = sc.nextInt();
+			System.out.println("Choose an option (1 to 7):");
+			int opt = Validation.getPositiveInput(sc);
 
 			switch (opt) {
 			case 1:
@@ -43,11 +45,12 @@ public class PayrollApp {
 				break;
 
 			case 3:
+				System.out.println("=== Add Payments to Employee using id ===");
 				System.out.println("Enter Employee ID:");
 				int id = Validation.getPositiveInput(sc);
 				Payment.addPaymentbyEmpid(id, employees, payments);
 				break;
-
+			
 			case 4:
 				if (payments.isEmpty()) {
 					System.out.println("No records found.");
@@ -61,6 +64,18 @@ public class PayrollApp {
 				}
 				break;
 			case 5:
+				System.out.println("=== See Payroll details of Employee using id ===");
+				System.out.println("Enter Employee ID:");
+				int empid = Validation.getPositiveInput(sc);
+				Payment.displayPayrollById(empid,payments);
+				break;
+			case 6:
+				System.out.println("=== See Payroll details of all Employees by date ===");
+				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+				String date = format.format(Validation.getDate());
+				Payment.displayPayrollBydate(date, payments);
+				break;
+			case 7:
 				System.out.println();
 				System.out.println("...End...");
 				return;

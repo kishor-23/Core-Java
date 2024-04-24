@@ -71,36 +71,71 @@ public class Payment {
 	public void setGrossPay(double grossPay) {
 		this.grossPay = grossPay;
 	}
-	public double calGrosspay(double payPerDay, int noOfHoursWorked, int overtime,double payPerHour) {
 
+	public double calGrosspay(double payPerDay, int noOfHoursWorked, int overtime, double payPerHour) {
 		// Gross Pay = (Pay per Hour x Total Hours Worked) + (Overtime Pay per Hour x
 		// Total Overtime Hours)
 		double pay = (payPerDay * noOfHoursWorked) + (overtime * payPerHour);
 		return pay;
 	}
 
+	public static void displayPayrollById(int empid, ArrayList<Payment> payments) {
+		boolean found = false;
+		for (Payment payment : payments) {
+			
+			if (payment.getEmpId() == empid) {
+				found=true;
+				System.out.println(payments.toString());
+			}
+		}
+		if (!found) {
+			System.out.println("Not Found..");
+		} 
+
+	}
+
+	public static void displayPayrollBydate(String date, ArrayList<Payment> payments) {
+		boolean found = false;
+		for (Payment payment : payments) {
+			if (payment.getDate().equals(date)) {
+				found=true;
+				System.out.println(payments.toString());
+			}
+		}
+		if (!found) {
+			System.out.println("Not Found..");
+		} 
+
+	}
+
 	// add payroll using employee id
 	public static void addPaymentbyEmpid(int empid, ArrayList<Employee> employees, ArrayList<Payment> payments) {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("=== Add Payments to Employee using id ===");
+
 		boolean found = false;
 		for (Employee e : employees) {
 			if (e.getId() == empid) {
 				found = true;
-				// calculating pay per day using salary by dividing total number of days(here
-				// 22) 
-				double payperHour = (e.getSalary() / 22)/8 ;
-				double payperday=e.getSalary() / 22;
-				System.out.println("Employee ID: " + e.getId() + " | Name: " + e.getName() + " | Pay per Hour: rs."
+				// calculating pay per day using monthly salary by dividing total number of
+				// days(here
+				// 22)
+				double payperHour = (e.getSalary() / 22) / 8;
+				double payperday = e.getSalary() / 22;
+				System.out.println("Employee ID: " + e.getId() + " | Name: " + e.getName() + " | Pay per day: rs."
 						+ String.format("%.2f", payperday));
 				System.out.println("Enter number of working days for " + e.getName() + ":");
-				int noOfHours = Validation.getPositiveInput(sc);
+				int noOfwork = Validation.getPositiveInput(sc);
+				while(noOfwork>22) {
+					System.out.println("number of working days for month is only 22");
+					System.out.println("enter a valid input");
+					noOfwork = Validation.getPositiveInput(sc);
+				}
 				System.out.println("Enter overtime hours for " + e.getName() + ", if no overtime enter 0:");
 				int overtime = Validation.getPositiveInput(sc);
 
 				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 				String date = format.format(Validation.getDate());
-				payments.add(new Payment(empid,payperday, payperHour, noOfHours, overtime, date));
+				payments.add(new Payment(empid, payperday, payperHour, noOfwork, overtime, date));
 			}
 		}
 		if (found) {
@@ -147,21 +182,16 @@ public class Payment {
 		}
 	}
 
-
-
-	public Payment(int empId, double payPerDay,double payperhour, int noOfHoursWorked, int overtime, String date) {
-
+	public Payment(int empId, double payPerDay, double payperhour, int noOfHoursWorked, int overtime, String date) {
 		this.id = autoIncrement++;
 		this.empId = empId;
 		this.payPerDay = payPerDay;
 		this.noOfHoursWorked = noOfHoursWorked;
 		this.overtime = overtime;
 		this.date = date;
-		this.payperhour=payperhour;
-		this.grossPay = calGrosspay(payPerDay, noOfHoursWorked, overtime,payperhour);
+		this.payperhour = payperhour;
+		this.grossPay = calGrosspay(payPerDay, noOfHoursWorked, overtime, payperhour);
 	}
-	
-
 	@Override
 	public String toString() {
 		return " [id=" + id + ", empId=" + empId + ", payPerday=" + String.format("%.2f", payPerDay)

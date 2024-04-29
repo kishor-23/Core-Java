@@ -3,7 +3,8 @@ package com.chainsys.day8april22task;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Employee {
+
+public class Employee{
 	public static int autoIncrement = 1;
 	private int id;
 	private String name;
@@ -84,5 +85,9 @@ public class Employee {
 	public String toString() {
 		return " [id=" + id + ", name=" + name + ", department=" + department + ", Salary=" + salary + "]";
 	}
+
+
+
+	
 
 }

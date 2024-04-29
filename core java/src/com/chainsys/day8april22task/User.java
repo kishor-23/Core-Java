@@ -2,7 +2,7 @@ package com.chainsys.day8april22task;
 
 import java.util.ArrayList;
 
-public class User {
+public class User{
  String mailId;
  String name;
  String password;

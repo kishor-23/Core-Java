@@ -50,8 +50,6 @@ public class TodoListApp {
 		String password = sc.next();
 		User user = User.loginUser(mail, password, users);
 		if (user != null) {
-			// for (int i = 0; i < 5; ++i) System.out.println();
-
 			System.out.println("Login successful. Welcome, " + user.getName() + "!");
 			System.out.println();
 			app(todo, user, users);
@@ -62,25 +60,25 @@ public class TodoListApp {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter name:");
 		String name = sc.next();
-		while(!Validation.isname(name)) {
+		while (!Validation.isname(name)) {
 			System.out.println("invalid: Enter only letters");
-			 name=sc.next();
+			name = sc.next();
 		}
 
-		
 		System.out.println("Enter email id:");
 		String mailId = sc.next();
-		
-		while(!Validation.isMailVaild(mailId)) {
+
+		while (!Validation.isMailVaild(mailId)) {
 			System.out.println("please enter a vaild mail id like name@gmail.com ");
-			mailId=sc.next();
+			mailId = sc.next();
 		}
 		System.out.println("Enter password:");
 		String password = sc.next();
-		while(!Validation.isValidPassword(password)) {
-            System.out.println("inValid password !,password should have 1 specail character, number ,capital  example:#Password123 ");
-            password = sc.next();
-        }
+		while (!Validation.isValidPassword(password)) {
+			System.out.println(
+					"inValid password !,password should have 1 specail character, number ,capital  example:#Password123 ");
+			password = sc.next();
+		}
 		User.registerUser(mailId, name, password, users);
 
 	}
@@ -136,11 +134,4 @@ public class TodoListApp {
 		}
 	}
 
-	
-
-	
-
-	
-
-	
 }

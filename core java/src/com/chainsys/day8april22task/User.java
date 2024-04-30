@@ -2,7 +2,13 @@ package com.chainsys.day8april22task;
 
 import java.util.ArrayList;
 
-public class User{
+
+ interface UserOperations {
+    void registerUser(String mailId, String name, String password, ArrayList<User> users);
+    User loginUser(String mailId, String password, ArrayList<User> users);
+}
+ 
+public class User implements UserOperations{
  String mailId;
  String name;
  String password;
@@ -32,8 +38,8 @@ public User(String mailId, String name, String password) {
 }
 
 
-// Function to register a new user
-public static void registerUser(String mailId, String name, String password,ArrayList<User> users) {
+@Override
+public  void registerUser(String mailId, String name, String password,ArrayList<User> users) {
     // Check if the user already exists
     for (User user : users) {
         if (user.getMailId().equals(mailId)) {
@@ -48,8 +54,8 @@ public static void registerUser(String mailId, String name, String password,Arra
 }
 
 
-
-public static User loginUser(String mailId, String password,ArrayList<User> users) {
+@Override
+public  User loginUser(String mailId, String password,ArrayList<User> users) {
     // Check if the user exists and the password matches
     for (User user : users) {
         if (user.getMailId().equals(mailId) && user.getPassword().equals(password)) {
@@ -60,6 +66,9 @@ public static User loginUser(String mailId, String password,ArrayList<User> user
     // If no user found or password doesn't match
     System.out.println("Invalid email ID or password. Please try again.");
     return null;
+}
+User(){
+	
 }
  
 }

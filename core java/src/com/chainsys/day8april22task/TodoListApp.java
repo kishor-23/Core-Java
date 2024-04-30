@@ -12,6 +12,7 @@ public class TodoListApp {
 		Scanner sc = new Scanner(System.in);
 		ArrayList<Task> todo = new ArrayList<>();
 		ArrayList<User> users = new ArrayList<>();
+
 		users.add(new User("user@gmail.com", "user", "hello"));
 		todo.add(new Task("morning walk", "Not done", "25-04-2024", "user@gmail.com"));
 		System.out.println(" *** Welcome to TodoList App *** ");
@@ -48,7 +49,8 @@ public class TodoListApp {
 		String mail = sc.next();
 		System.out.println("Enter password:");
 		String password = sc.next();
-		User user = User.loginUser(mail, password, users);
+		UserOperations userOperations = new User();
+		User user = userOperations.loginUser(mail, password, users);
 		if (user != null) {
 			System.out.println("Login successful. Welcome, " + user.getName() + "!");
 			System.out.println();
@@ -58,6 +60,7 @@ public class TodoListApp {
 
 	public static void signUp(ArrayList<User> users) {
 		Scanner sc = new Scanner(System.in);
+		UserOperations userOperations = new User();
 		System.out.println("Enter name:");
 		String name = sc.next();
 		while (!Validation.isname(name)) {
@@ -79,8 +82,7 @@ public class TodoListApp {
 					"inValid password !,password should have 1 specail character, number ,capital  example:#Password123 ");
 			password = sc.next();
 		}
-		User.registerUser(mailId, name, password, users);
-
+		userOperations.registerUser(mailId, name, password, users);
 	}
 
 	public static void app(ArrayList<Task> todo, User user, ArrayList<User> users) {

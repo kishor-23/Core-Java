@@ -4,59 +4,91 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TestStudent {
+	public static boolean isname(String name) {
+		String regEx = "^[a-zA-Z]+$";
+		Pattern p = Pattern.compile(regEx);
+		Matcher m = p.matcher(name);
+		return m.matches();
+
+	}
+	public static int getPositiveInput(Scanner scanner) {
+		int n = 0;
+		while (scanner.hasNext()) {
+			if (scanner.hasNextInt()) {
+				n = scanner.nextInt();
+				if (n <= 0) {
+					System.out.println("Enter only positive numbers. " + n + " is negative.");
+				} else {
+					break;
+				}
+			} else {
+				System.out.println("Enter only numbers. " + scanner.next() + " is not a number.");
+			}
+		}
+		return n;
+	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
-	
-		  Student student1 = new Student("Vikram", 25);
-	     //   insertStudent(student1);
-	    //    read();
-	   //     updateStudent(4, "abinesh", 30);
-	        readStudentDetails();
-	  //      deleteStudent(1);
-	 //       read();
+	      Scanner sc=new Scanner(System.in);
+	      StudentDao studentOperations=new StudentImpl();
+	      System.out.println("  ***Welcome***  ");
+	        while (true) {
+				System.out.println(" 1. display student details ");
+				System.out.println(" 2. add record");
+				System.out.println(" 3. update student detail ");
+				System.out.println(" 4. delete record ");
+				System.out.println(" 5. exit ");
+				String choice = sc.next();
+				switch (choice) {
+				case "1":
+					 studentOperations.readStudentDetails();
+					break;
+				case "2":
+					System.out.println("enter your name ");
+					String name=sc.next();
+				    while(!isname(name)) {
+				    	System.out.println("enter only letters");
+				    	 name=sc.next();
+				    }
+				    System.out.println("enter your age ");
+				    int age =getPositiveInput(sc);
+					 StudentImpl stud = new StudentImpl(name,age); 
+					 studentOperations.insertStudent(stud);
+					break;
+				case "3":
+					 System.out.println("enter your id ");
+					   int  id =getPositiveInput(sc);
+					System.out.println("enter your name ");
+					String studentname=sc.next();
+				    while(!isname(studentname)) {
+				    	System.out.println("enter only letters");
+				    	 name=sc.next();
+				    }
+				    System.out.println("enter your age ");
+				    int studentage =getPositiveInput(sc);
+				    studentOperations.updateStudent( id,studentname,studentage); 
+					break;
+				case "4":
+				
+				    System.out.println("enter id : ");
+				    int sid =getPositiveInput(sc);
+				    studentOperations.deleteStudent(sid);
+					break;
+				case "5":
+					System.out.println("Goodbye!");
+					return;
+				default:
+					System.out.println("Invalid option! Please choose again.");
+				}
+			}
 
 	}
-	
-    public static void insertStudent(Student student) throws ClassNotFoundException, SQLException {
-        Connection con = JdbcConnection.getConnection();
-        String insertQuery = "INSERT INTO student (name, age) VALUES (?, ?)";
-        PreparedStatement ps = con.prepareStatement(insertQuery);
-        ps.setString(1, student.getName());
-        ps.setInt(2, student.getAge());
-        int rows = ps.executeUpdate();
-        System.out.println(rows + " rows inserted");
-    }
 
-	   public static void readStudentDetails() throws ClassNotFoundException, SQLException {
-	        Connection con = JdbcConnection.getConnection();
-	        String selectQuery = "SELECT id, name, age FROM student";
-	        PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-	        ResultSet resultSet = preparedStatement.executeQuery();
-	        System.out.println("Student Records:");
-	        while (resultSet.next()) {
-	            System.out.println("ID: " + resultSet.getInt("id") + ", Name: " + resultSet.getString("name") + ", Age: " + resultSet.getInt("age"));
-	        }
-	    }
-	    public static void updateStudent(int id, String name, int age) throws ClassNotFoundException, SQLException {
-	        Connection con = JdbcConnection.getConnection();
-	        String updateQuery = "UPDATE student SET name=?, age=? WHERE id=?";
-	        PreparedStatement preparedStatement = con.prepareStatement(updateQuery);
-	        preparedStatement.setString(1, name);
-	        preparedStatement.setInt(2, age);
-	        preparedStatement.setInt(3, id);
-	        int rows = preparedStatement.executeUpdate();
-	        System.out.println(rows + " rows updated");
-	    }
-	    public static void deleteStudent(int id) throws ClassNotFoundException, SQLException {
-	        Connection con = JdbcConnection.getConnection();
-	        String deleteQuery = "DELETE FROM student WHERE id=?";
-	        PreparedStatement preparedStatement = con.prepareStatement(deleteQuery);
-	        preparedStatement.setInt(1, id);
-	        int rows = preparedStatement.executeUpdate();
-	        System.out.println(rows + " rows deleted");
-	    }
 
 }

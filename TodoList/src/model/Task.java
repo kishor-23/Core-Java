@@ -15,21 +15,27 @@ public class Task {
 	public String getName() {
 		return name;
 	}
-	public Task(int id, String name, String status, String date, String usermail) {
-
+    public Task(int id) {
+    	this.id = id;
+    }
+	public Task( String name, String status, String date,String usermail) {
 		this.id = id;
 		this.name = name;
 		this.status = status;
 		this.date = date;
-		this.usermail = usermail;
-	}
-	public Task(int id, String name, String status, String date) {
-
-		this.id = id;
-		this.name = name;
-		this.status = status;
-		this.date = date;
+		this.usermail=usermail;
 	
+	}
+	public Task(int id,String status,String usermail) {
+		this.id = id;
+		this.status = status;
+		this.usermail=usermail;
+	
+	}
+	public Task( String name, String status, String date) {
+		this.name = name;
+		this.status = status;
+		this.date = date;
 	}
 	public void setName(String name) {
 		this.name = name;

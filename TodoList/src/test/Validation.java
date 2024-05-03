@@ -48,17 +48,8 @@ public class Validation {
 	public static boolean isValidPassword(String password) {
 		// Check minimum length 6
 		String regEx = "(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.])(?=.*\\d).{5,}";
-
 		Pattern p = Pattern.compile(regEx);
 		Matcher m = p.matcher(password);
-		return m.matches();
-	}
-
-	public static boolean isPhoneNumber(String phoneNumber) {
-		// Phone number pattern: accepts 10 digits, optionally separated by hyphens
-		String regEx = "^\\d{10}$";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(phoneNumber);
 		return m.matches();
 	}
 

@@ -36,44 +36,50 @@ public class UserImpl implements UserDAO{
 		}
 
 	}
-
 	@Override
 	public User loginUser(String mailId, String password)
-			throws ClassNotFoundException, SQLException {
-		// Connect to database
-		Connection con = Dbconnection.getConnection();
-		String selectQuery = "SELECT mailId,password,name FROM user WHERE mailId = ? AND password = ?";
-		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-		preparedStatement.setString(1, mailId);
-		preparedStatement.setString(2, password);
-		ResultSet resultSet = preparedStatement.executeQuery();
-		if (resultSet.next()) {
-			return new User(resultSet.getString("mailId"), resultSet.getString("name"),
-					resultSet.getString("password"));
-		} else {
-			System.out.println("Invalid email ID or password. Please try again.");
-			return null;
-		}
+	        throws ClassNotFoundException, SQLException {
+	    Connection con = Dbconnection.getConnection();
+	    String selectQuery = "SELECT mailId,password,name FROM user WHERE mailId = ?";
+	    PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
+	    preparedStatement.setString(1, mailId);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    // check if the user exists
+	    if (resultSet.next()) {
+	        // Check if the password matches
+	        if (password.equals(resultSet.getString("password"))) {
+	            // If password matches, return user object
+	            return new User(resultSet.getString("mailId"), resultSet.getString("name"),
+	                    resultSet.getString("password"));
+	        } else {
+	            // If password does not match, indicate wrong password
+	            System.out.println("Wrong password. Please try again.");
+	            return null;
+	        }
+	    } else {
+	        // if user does not exist, indicate user does not exist
+	        System.out.println("User with email ID " + mailId + " does not exist.");
+	        return null;
+	    }
 	}
 
-	public  ArrayList<User> listofUsers() throws ClassNotFoundException, SQLException {
-		Connection con = Dbconnection.getConnection();
-		String query = "select name,mailId,password from user";
-		PreparedStatement ps = con.prepareStatement(query);
-		ArrayList<User> list = new ArrayList();
-		ResultSet resultSet = ps.executeQuery();
-		while (resultSet.next()) {
-		    String id = resultSet.getString("mailId");
-			String name = resultSet.getString("name");
-			String password= resultSet.getString("password");
 
-			User u = new User();
-			u.setMailId(id);
-			u.setName(name);
-			u.setPassword(password);
-			list.add(u);
-		}
-		return list;
+	@Override
+	public void deleteUser(String mailId) throws ClassNotFoundException, SQLException {
+	    Connection con = Dbconnection.getConnection();
+	    String deleteQuery = "DELETE FROM user WHERE mailId = ?";
+	    PreparedStatement deleteStatement = con.prepareStatement(deleteQuery);
+	    deleteStatement.setString(1, mailId);
+	    int rowsAffected = deleteStatement.executeUpdate();
+	    if (rowsAffected > 0) {
+	        System.out.println("User with mail ID " + mailId + " deleted successfully.");
+	    } else {
+	        System.out.println("User with mail ID " + mailId + " not found.");
+	    }
+	  
 	}
+
+
+
 
 }

@@ -4,56 +4,42 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+
 
 public class Validation {
-	public static boolean isname(String name) {
-		// only letters
-		String regEx = "^[a-zA-Z]+$";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(name);
-		return m.matches();
+    private static final Scanner scanner = new Scanner(System.in);
 
-	}
+    public static boolean isName(String name) {
+        return name.matches("^[a-zA-Z ]+$");
+    }
 
-	public static Date getDate() {
-		Date date = null;
-		boolean validDate = false;
-		Scanner sc = new Scanner(System.in);
-		while (!validDate) {
-			System.out.println("Enter date yyyy-mm-dd:");
-			String dateInput = sc.next();
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static Date getDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false); // Rejects invalid dates like 2024-02-31
 
-			try {
-				date = dateFormat.parse(dateInput);
-				validDate = true; // Set validDate to true if parsing succeeds
-			} catch (ParseException e) {
-				System.out.println("Invalid date format. Please enter date in yyyy-mm-dd format.");
-			}
-		}
+        Date date = null;
+        while (date == null) {
+            System.out.println("Enter date yyyy-mm-dd:");
+            String dateInput = scanner.next();
+            try {
+                date = dateFormat.parse(dateInput);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter date in yyyy-mm-dd format.");
+            }
+        }
+        return date;
+    }
 
-		return date;
-	}
+    public static boolean isMailValid(String mail) {
+        return mail.matches("^[a-z0-9]+[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]{2,}$");
+    }
 
-	public static boolean isMailVaild(String mail) {
-		String regEx = "^[a-z0-9]+[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]{2,}$";
-		// Pattern.matches(regEx, mail);
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(mail);
-		return m.matches();
-	}
+    public static boolean isValidPassword(String password) {
+        return password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.\\d]).{6,}");
+    }
 
-	public static boolean isValidPassword(String password) {
-		// Check minimum length 6
-		String regEx = "(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.])(?=.*\\d).{5,}";
-		Pattern p = Pattern.compile(regEx);
-		Matcher m = p.matcher(password);
-		return m.matches();
-	}
-
-	public static int getPositiveInput(Scanner scanner) {
+    public static int getPositiveInput(Scanner scanner) {
 		int n = 0;
 		while (scanner.hasNext()) {
 			if (scanner.hasNextInt()) {
@@ -69,5 +55,4 @@ public class Validation {
 		}
 		return n;
 	}
-
 }

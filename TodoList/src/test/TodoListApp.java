@@ -15,7 +15,6 @@ public class TodoListApp {
 		Scanner sc = new Scanner(System.in);
 		UserDAO userOperations = new UserImpl();
 		TaskDAO taskOperations = new TaskImpl();
-
 		System.out.println(" *** Welcome to TodoList App *** ");
 		startPage(userOperations, taskOperations);
 	}
@@ -33,8 +32,17 @@ public class TodoListApp {
 			case "1":
 				System.out.println("Enter email id:");
 				String mail = sc.nextLine();
+				while (!Validation.isMailValid(mail)) {
+					System.out.println("please enter a vaild mail id like name@gmail.com ");
+					mail = sc.nextLine();
+				}
 				System.out.println("Enter password:");
 				String password = sc.nextLine();
+				while (!Validation.isValidPassword(password)) {
+					System.out.println(
+							"inValid password !,password should have specail character, number ,capital & small letters  eg:#Password123 ");
+					password = sc.nextLine();
+				}
 				User user = userOperations.loginUser(mail, password);
 				if (user == null) {
 					System.out.println("Login failed...");
@@ -47,7 +55,7 @@ public class TodoListApp {
 			case "2":
 				System.out.println("Enter name:");
 				String username = sc.nextLine();
-				while (!Validation.isname(username)) {
+				while (!Validation.isName(username)) {
 					System.out.println("invalid: Enter only letters");
 					username = sc.nextLine();
 				}
@@ -55,7 +63,7 @@ public class TodoListApp {
 				System.out.println("Enter email id:");
 				String mailId = sc.nextLine();
 
-				while (!Validation.isMailVaild(mailId)) {
+				while (!Validation.isMailValid(mailId)) {
 					System.out.println("please enter a vaild mail id like name@gmail.com ");
 					mailId = sc.nextLine();
 				}
@@ -90,7 +98,8 @@ public class TodoListApp {
 			System.out.println("4. Display all tasks");
 			System.out.println("5. Display upcoming 5Days Tasks");
 			System.out.println("6. Delete account");
-			System.out.println("7. Logout");
+			System.out.println("7. Display task by date");
+			System.out.println("8. Logout");
 			System.out.println("Choose an option (1 to 7):");
 			String choice = sc.nextLine();
 			switch (choice) {
@@ -133,17 +142,23 @@ public class TodoListApp {
 					}
 					System.out.println("invalid choose y or n");
 					ans = sc.next();
-				
+
 				}
-				if(ans.equals("y")) {
+				if (ans.equals("y")) {
 					userOperations.deleteUser(user.getMailId());
 					return;
 				}
-				
 				System.out.println();
 				break;
 			case "7":
-				System.out.println("Logged out successfully.");
+				SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+				String date = dateformat.format(Validation.getDate());
+				
+				taskOperations.displayTasksByDate(date, user);
+				break;
+				
+			case "8":
+			    System.out.println("Logged out successfully.");
 				System.out.println();
 				return;
 			default:

@@ -14,6 +14,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class CollectionsDemo {
@@ -76,6 +77,7 @@ public class CollectionsDemo {
 		arrdeque.addFirst(10);
 		arrdeque.addLast(20);
 		System.out.println("array deque :" + arrdeque);
+		
 	
 		System.out.println();
 
@@ -87,15 +89,17 @@ public class CollectionsDemo {
 		stack.push(3);
 
 		System.out.println("stack :" + stack);
+		System.out.println("search 3:"+stack.search(3));
 		System.out.println("peek in stack :" + stack.peek());
 		System.out.println(stack + " pop remove the element:" + stack.pop());
 		System.out.println("stack :" + stack);
+		
 		System.out.println();
 
 		// HashMap
 		// key value pairs
 		Map<Integer, String> hashMap = new HashMap<>();
-		hashMap.put(1, "One");
+		hashMap.put(4, "One");
 		hashMap.put(3, "Three");
 		hashMap.put(2, "Two");
 		System.out.println("HashMap: " + hashMap);
@@ -108,10 +112,21 @@ public class CollectionsDemo {
 		System.out.println();
 		//it is synchronized
 		Map<Integer, String> hashtable = new Hashtable<>();
-		hashtable.put(1, "One");
+		hashtable.put(4, "One");
 		hashtable.put(3, "Three");
 		hashtable.put(2, "Two");
 		System.out.println("Hashtable: " + hashtable);
+		
+		// Creating an empty TreeMap 
+        Map<String, Integer> treemap = new TreeMap<>(); 
+  
+        // Inserting custom elements in the Map 
+        // using put() method 
+        treemap.put("virat", 18); 
+        treemap.put("sachin", 10); 
+        treemap.put("dhoni", 7); 
+        System.out.println("treemap :"+treemap);
+		
 		// HashSet
 		// remove duplicates (only unique elements)
 		// does not maintain the order

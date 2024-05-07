@@ -121,8 +121,8 @@ public class TodoListApp {
 				taskOperations.updateTaskStatus(updatetask);
 				break;
 			case "3":
-				System.out.println("Enter task id:");
-				int taskid = Validation.getPositiveInput(sc);
+			//	System.out.println("Enter task id:");
+				int taskid = Validation.getIdPositiveValue();
 				taskOperations.deleteTask(taskid, user.getMailId());
 				break;
 			case "4":

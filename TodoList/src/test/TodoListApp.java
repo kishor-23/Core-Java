@@ -40,7 +40,7 @@ public class TodoListApp {
 				String password = sc.nextLine();
 				while (!Validation.isValidPassword(password)) {
 					System.out.println(
-							"inValid password !,password should have specail character, number ,capital & small letters  eg:#Password123 ");
+							"inValid password !,password should have special character, number ,capital & small letters  eg:#Password123 ");
 					password = sc.nextLine();
 				}
 				User user = userOperations.loginUser(mail, password);
@@ -107,7 +107,7 @@ public class TodoListApp {
 				System.out.println("Enter a todo task:");
 				String task = sc.nextLine();
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-				String taskDate = format.format(Validation.getDate());
+				String taskDate = format.format(Validation.getValidDate());
 				Task addtask = new Task(task, "not done", taskDate, user.getMailId());
 				taskOperations.addTask(addtask);
 				break;

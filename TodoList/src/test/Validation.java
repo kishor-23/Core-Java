@@ -32,11 +32,11 @@ public class Validation {
     }
 
     public static boolean isMailValid(String mail) {
-        return mail.matches("^[a-z0-9]+[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]{2,}$");
+        return mail.matches("^[a-z]+[a-z0-9\\.]+@[a-z0-9]+\\.[a-z]{2,}$");
     }
 
     public static boolean isValidPassword(String password) {
-        return password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.\\d]).{6,}");
+        return password.matches("(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+.])(?=.*.\\d).{6,}");
     }
 
     public static int getPositiveInput(Scanner scanner) {
@@ -55,4 +55,41 @@ public class Validation {
 		}
 		return n;
 	}
+    
+    
+
+    public static Date getValidDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false); // Rejects invalid dates like 2024-02-31
+
+        Date currentDate = new Date();
+        // Get current date
+        Date date = null;
+        Scanner scanner = new Scanner(System.in);
+        String currentdate = dateFormat.format(currentDate);
+        while (date == null) {
+            System.out.println("Enter a date in (yyyy-MM-dd):");
+            String dateInput = scanner.next();
+            try {
+                date = dateFormat.parse(dateInput);
+
+                // Compare entered date with current date 
+                if (date.before(dateFormat.parse(currentdate))) {
+                    System.out.println("Entered date should be in the future. or current date");
+                  // Reset date to null to repeat the loop
+                    date = null;
+                }
+
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please enter date in yyyy-MM-dd format.");
+            }
+        }
+        return date;
+    }
 }
+
+
+
+
+
+

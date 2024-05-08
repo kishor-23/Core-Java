@@ -106,9 +106,19 @@ public class TodoListApp {
 			case "1":
 				System.out.println("Enter a todo task:");
 				String task = sc.nextLine();
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 				String taskDate = format.format(Validation.getValidDate());
-				Task addtask = new Task(task, "not done", taskDate, user.getMailId());
+				System.out.println("enter priority (high,medium,low)");
+				String priority = sc.nextLine();
+				while (true) {
+					if (priority.equals("high") || priority.equals("low") || priority.equals("medium")) {
+						break;
+					}
+					System.out.println("invalid choose male or female");
+					priority = sc.next();
+				}
+
+				Task addtask = new Task(task, "not done", priority, taskDate, user.getMailId());
 				taskOperations.addTask(addtask);
 				break;
 			case "2":
@@ -121,7 +131,7 @@ public class TodoListApp {
 				taskOperations.updateTaskStatus(updatetask);
 				break;
 			case "3":
-			//	System.out.println("Enter task id:");
+				// System.out.println("Enter task id:");
 				int taskid = Validation.getIdPositiveValue();
 				taskOperations.deleteTask(taskid, user.getMailId());
 				break;
@@ -153,12 +163,11 @@ public class TodoListApp {
 			case "7":
 				SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 				String date = dateformat.format(Validation.getDate());
-				
 				taskOperations.displayTasksByDate(date, user);
 				break;
-				
+
 			case "8":
-			    System.out.println("Logged out successfully.");
+				System.out.println("Logged out successfully.");
 				System.out.println();
 				return;
 			default:

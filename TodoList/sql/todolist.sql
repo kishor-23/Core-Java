@@ -7,16 +7,17 @@ create table user(
  password varchar(30) not null
 );
 
-CREATE TABLE todo_task (
+CREATE TABLE task (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) not null,
     status VARCHAR(50),
-    task_date DATE, 
+    priority VARCHAR(50) check  (priority in ('high','medium','low')),
+    task_date datetime, 
     user_mail VARCHAR(255)
 );
 
 
-ALTER TABLE todo_task
+ALTER TABLE task
 ADD CONSTRAINT fk_user_mail
 FOREIGN KEY (user_mail)
 REFERENCES user(mailId)
@@ -36,3 +37,10 @@ SELECT name, status, task_date FROM todo_task WHERE user_mail = "user@mail.com";
 select * from user;
 
 
+SELECT id, name, status,priority, task_date  FROM task
+WHERE user_mail = "user@gmail.com" and CAST(task_date AS DATE)="2024-05-08"
+ORDER BY CASE 
+     WHEN  priority = "high" THEN 1
+     WHEN priority = "medium" THEN 2
+     WHEN priority = "low" THEN 3
+     END ASC,task_date asc  ;

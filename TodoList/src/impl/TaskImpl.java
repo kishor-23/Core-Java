@@ -22,20 +22,25 @@ public class TaskImpl implements TaskDAO {
 
 	@Override
 	public void addTask(Task task) throws ClassNotFoundException, SQLException {
-		String insertQuery = "insert into todo_task (name,status,task_date,user_mail) values(?,?,?,?) ";
+		String insertQuery = "insert into task (name,status, priority,task_date,user_mail) values(?,?,?,?,?);";
 		PreparedStatement preparedStatement = con.prepareStatement(insertQuery);
 		preparedStatement.setString(1, task.getName());
 		preparedStatement.setString(2, task.getStatus());
-		preparedStatement.setString(3, task.getDate());
-		preparedStatement.setString(4, task.getUsermail());
+		preparedStatement.setString(3, task.getPriority());
+		preparedStatement.setString(4, task.getDate());
+		preparedStatement.setString(5, task.getUsermail());
 		int rows = preparedStatement.executeUpdate();
 		System.out.println(rows + " task inserted");
-
 	}
 
 	@Override
 	public void displayAllTasks(User user) throws ClassNotFoundException, SQLException {
-		String selectQuery = "SELECT id, name, status, task_date FROM todo_task WHERE user_mail = ?;";
+		String selectQuery = "SELECT id, name, status,priority, task_date  FROM task WHERE user_mail = ?"
+				+ "ORDER BY CASE \r\n"
+				+ "     WHEN  priority = \"high\" THEN 1\r\n"
+				+ "     WHEN priority = \"medium\" THEN 2\r\n"
+				+ "     WHEN priority = \"low\" THEN 3\r\n"
+				+ "     END ASC,task_date asc  ;";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setString(1, user.getMailId());
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -46,15 +51,15 @@ public class TaskImpl implements TaskDAO {
 			String name = resultSet.getString("name");
 			String status = resultSet.getString("status");
 			String date = resultSet.getString("task_date");
-
-			System.out.println("[ ID: " + id + ", Task: " + name + ", Status: " + status + ", Date: " + date + " ] ");
+			String priority=resultSet.getString("priority");
+			System.out.println("[ ID: " + id + ", Task: " + name + ", Status: " + status +", Priority: " + priority + ", Date: " + date + " ] ");
 		}
 
 	}
 
 	@Override
 	public void updateTaskStatus(Task task) throws ClassNotFoundException, SQLException {
-		String updateQuery = "UPDATE todo_task SET status = ? WHERE id = ? AND user_mail = ?";
+		String updateQuery = "UPDATE task SET status = ? WHERE id = ? AND user_mail = ?";
 		PreparedStatement ps = con.prepareStatement(updateQuery);
 		ps.setString(1, task.getStatus());
 		ps.setInt(2, task.getId());
@@ -70,7 +75,7 @@ public class TaskImpl implements TaskDAO {
 
 	@Override
 	public void deleteTask(int taskid, String usermail) throws ClassNotFoundException, SQLException {
-		String deleteQuery = "DELETE FROM todo_task WHERE id = ? AND user_mail = ?";
+		String deleteQuery = "DELETE FROM task WHERE id = ? AND user_mail = ?";
 		PreparedStatement ps = con.prepareStatement(deleteQuery);
 		ps.setInt(1, taskid);
 		ps.setString(2, usermail);
@@ -85,10 +90,9 @@ public class TaskImpl implements TaskDAO {
 
 	public void displayTodayTasks(User user) throws ClassNotFoundException, SQLException {
 
-		String selectQuery = "SELECT id, name, status, task_date FROM todo_task WHERE user_mail = ? AND task_date = ?";
+		String selectQuery = "SELECT id, name, status,priority, task_date FROM task WHERE user_mail = ? AND  CAST(task_date AS DATE)=? AND status=\"not done\";";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setString(1, user.getMailId());
-
 		// Get the current date
 		Date currentDate = new Date();
 		java.sql.Date sqlCurrentDate = new java.sql.Date(currentDate.getTime());
@@ -104,14 +108,15 @@ public class TaskImpl implements TaskDAO {
 			String status = resultSet.getString("status");
 			Date date = resultSet.getDate("task_date");
 			String formattedDate = dateFormat.format(date);
+			String priority=resultSet.getString("priority");
 
-			System.out.println(
-					"[ ID: " + id + ", Task: " + name + ", Status: " + status + ", Date: " + formattedDate + " ] ");
+			System.out.println("[ ID: " + id + ", Task: " + name + ", Status: " + status +", Priority: " + priority + ", Date: " + formattedDate + " ] ");
+
 		}
 	}
 	public void displayTasksByDate(String taskdate,User user) throws ClassNotFoundException, SQLException {
 
-		String selectQuery = "SELECT id, name, status, task_date FROM todo_task WHERE user_mail = ? AND task_date = ?";
+		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_mail = ? AND  CAST(task_date AS DATE)=? AND status=\"not done\";";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setString(1, user.getMailId());
 		preparedStatement.setString(2, taskdate);
@@ -124,14 +129,15 @@ public class TaskImpl implements TaskDAO {
 			String status = resultSet.getString("status");
 			Date date = resultSet.getDate("task_date");
 			String formattedDate = dateFormat.format(date);
+			String priority=resultSet.getString("priority");
 			System.out.println(
-					"[ ID: " + id + ", Task: " + name + ", Status: " + status + ", Date: " + formattedDate + " ] ");
+					"[ ID: " + id + ", Task: " + name + ", Status: " + status +", Priority: " + priority+ ", Date: " + formattedDate + " ] ");
 		}
 	}
 
 	@Override
 	public void displayTodayAndNext5DaysTasks(User user) throws ClassNotFoundException, SQLException {
-		String selectQuery = "SELECT id, name, status, task_date FROM todo_task WHERE user_mail = ? AND task_date BETWEEN ? AND ?";
+		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_mail = ? AND task_date BETWEEN ? AND ?";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setString(1, user.getMailId());
 		// Get the current date

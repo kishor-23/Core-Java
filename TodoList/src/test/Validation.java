@@ -75,7 +75,7 @@ public class Validation {
 	}
 
 	public static Date getValidDate() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 		dateFormat.setLenient(false); // Rejects invalid dates like 2024-02-31
 
 		Date currentDate = new Date();
@@ -84,11 +84,10 @@ public class Validation {
 		Scanner scanner = new Scanner(System.in);
 		String currentdate = dateFormat.format(currentDate);
 		while (date == null) {
-			System.out.println("Enter a date in (yyyy-MM-dd):");
+			System.out.println("Enter a date in (yyyy-MM-dd-HH-mm):");
 			String dateInput = scanner.next();
 			try {
 				date = dateFormat.parse(dateInput);
-
 				// Compare entered date with current date
 				if (date.before(dateFormat.parse(currentdate))) {
 					System.out.println("Entered date should be in the future. or current date");

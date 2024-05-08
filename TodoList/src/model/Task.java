@@ -4,7 +4,14 @@ public class Task {
 	int id;
 	String name;
 	String status;
+	String  priority;
 	String date;
+	public String getPriority() {
+		return priority;
+	}
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
 	String usermail;
 	public int getId() {
 		return id;
@@ -19,10 +26,17 @@ public class Task {
     	this.id = id;
     }
 	public Task( String name, String status, String date,String usermail) {
-		this.id = id;
 		this.name = name;
 		this.status = status;
 		this.date = date;
+		this.usermail=usermail;
+	
+	}
+	public Task( String name, String status,String priority,  String date,String usermail) {
+		this.name = name;
+		this.status = status;
+		this.date = date;
+		this.priority = priority;
 		this.usermail=usermail;
 	
 	}

@@ -2,6 +2,8 @@ package test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -73,6 +75,16 @@ public class Validation {
 		}
 
 	}
+	 public static String getCurrentDate() {
+	        // Get the current date
+	        LocalDate currentDate = LocalDate.now();
+	        
+	        // Format the date as yyyy-MM-dd
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        String formattedDate = currentDate.format(formatter);
+	        
+	        return formattedDate;
+	    }
 
 	public static Date getValidDate() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");

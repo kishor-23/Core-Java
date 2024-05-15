@@ -12,7 +12,7 @@ public interface TaskDAO {
 
 	void displayAllTasks(User user) throws ClassNotFoundException, SQLException;
 
-	void deleteTask(int taskid, String usermail) throws ClassNotFoundException, SQLException;
+	void deleteTask(int taskId, int userId) throws ClassNotFoundException, SQLException;
 
 	void updateTaskStatus(Task task) throws ClassNotFoundException, SQLException;
 

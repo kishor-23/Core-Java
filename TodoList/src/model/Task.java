@@ -5,14 +5,21 @@ public class Task {
 	String name;
 	String status;
 	String  priority;
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 	String date;
+	int userId;
 	public String getPriority() {
 		return priority;
 	}
 	public void setPriority(String priority) {
 		this.priority = priority;
 	}
-	String usermail;
+	
 	public int getId() {
 		return id;
 	}
@@ -25,32 +32,22 @@ public class Task {
     public Task(int id) {
     	this.id = id;
     }
-	public Task( String name, String status, String date,String usermail) {
-		this.name = name;
-		this.status = status;
-		this.date = date;
-		this.usermail=usermail;
-	
-	}
-	public Task( String name, String status,String priority,  String date,String usermail) {
+
+	public Task( String name, String status,String priority,  String date,int userId) {
 		this.name = name;
 		this.status = status;
 		this.date = date;
 		this.priority = priority;
-		this.usermail=usermail;
+		this.userId=userId;
 	
 	}
-	public Task(int id,String status,String usermail) {
+	public Task(int id,String status,int userId) {
 		this.id = id;
 		this.status = status;
-		this.usermail=usermail;
+		this.userId=userId;
 	
 	}
-	public Task( String name, String status, String date) {
-		this.name = name;
-		this.status = status;
-		this.date = date;
-	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -66,11 +63,6 @@ public class Task {
 	public void setDate(String date) {
 		this.date = date;
 	}
-	public String getUsermail() {
-		return usermail;
-	}
-	public void setUsermail(String usermail) {
-		this.usermail = usermail;
-	}
+	
 	
 }

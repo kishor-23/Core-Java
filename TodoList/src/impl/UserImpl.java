@@ -40,7 +40,7 @@ public class UserImpl implements UserDAO {
 
 	@Override
 	public User loginUser(String mailId, String password) throws ClassNotFoundException, SQLException {
-		String selectQuery = "SELECT mailId,password,name FROM user WHERE mailId = ?";
+		String selectQuery = "SELECT id,mailId,password,name FROM user WHERE mailId = ?";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setString(1, mailId);
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -49,7 +49,7 @@ public class UserImpl implements UserDAO {
 			// Check if the password matches
 			if (password.equals(resultSet.getString("password"))) {
 				// If password matches, return user object
-				return new User(resultSet.getString("mailId"), resultSet.getString("name"),
+				return new User(resultSet.getInt("id"),resultSet.getString("mailId"), resultSet.getString("name"),
 						resultSet.getString("password"));
 			} else {
 				// If password does not match, indicate wrong password
@@ -64,15 +64,15 @@ public class UserImpl implements UserDAO {
 	}
 
 	@Override
-	public void deleteUser(String mailId) throws ClassNotFoundException, SQLException {
-		String deleteQuery = "DELETE FROM user WHERE mailId = ?";
+	public void deleteUser(int id) throws ClassNotFoundException, SQLException {
+		String deleteQuery = "DELETE FROM user WHERE id = ?";
 		PreparedStatement deleteStatement = con.prepareStatement(deleteQuery);
-		deleteStatement.setString(1, mailId);
+		deleteStatement.setInt(1, id);
 		int rowsAffected = deleteStatement.executeUpdate();
 		if (rowsAffected > 0) {
-			System.out.println("User with mail ID " + mailId + " deleted successfully.");
+			System.out.println("User with  ID " + id + " deleted successfully.");
 		} else {
-			System.out.println("User with mail ID " + mailId + " not found.");
+			System.out.println("User with  ID " + id + " not found.");
 		}
 
 	}

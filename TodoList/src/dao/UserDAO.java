@@ -10,5 +10,5 @@ public interface UserDAO {
 
 	User loginUser(String mailId, String password) throws ClassNotFoundException, SQLException;
 
-	void deleteUser(String mailId) throws ClassNotFoundException, SQLException;
+	void deleteUser(int userId) throws ClassNotFoundException, SQLException;
 }

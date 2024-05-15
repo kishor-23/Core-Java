@@ -1,6 +1,16 @@
 package model;
 
 public class User {
+	int id;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+
 	String mailId;
 	String name;
 	String password;
@@ -22,7 +32,8 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public User(String mailId, String name, String password) {
+	public User(int id,String mailId, String name, String password) {
+		this.id=id;
 		this.mailId = mailId;
 		this.name = name;
 		this.password = password;

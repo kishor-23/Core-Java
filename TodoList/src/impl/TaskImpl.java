@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,27 +23,28 @@ public class TaskImpl implements TaskDAO {
 
 	@Override
 	public void addTask(Task task) throws ClassNotFoundException, SQLException {
-		String insertQuery = "insert into task (name,status, priority,task_date,user_mail) values(?,?,?,?,?);";
+		String insertQuery = "insert into task (name,status, priority,task_date,user_id) values(?,?,?,?,?);";
 		PreparedStatement preparedStatement = con.prepareStatement(insertQuery);
 		preparedStatement.setString(1, task.getName());
 		preparedStatement.setString(2, task.getStatus());
 		preparedStatement.setString(3, task.getPriority());
 		preparedStatement.setString(4, task.getDate());
-		preparedStatement.setString(5, task.getUsermail());
+		preparedStatement.setInt(5, task.getUserId());
 		int rows = preparedStatement.executeUpdate();
 		System.out.println(rows + " task inserted");
 	}
 
 	@Override
 	public void displayAllTasks(User user) throws ClassNotFoundException, SQLException {
-		String selectQuery = "SELECT id, name, status,priority, task_date  FROM task WHERE user_mail = ?"
+		String selectQuery = "SELECT id, name, status,priority, task_date  FROM task\r\n"
+				+ "WHERE user_id = ? \r\n"
 				+ "ORDER BY CASE \r\n"
 				+ "     WHEN  priority = \"high\" THEN 1\r\n"
 				+ "     WHEN priority = \"medium\" THEN 2\r\n"
 				+ "     WHEN priority = \"low\" THEN 3\r\n"
-				+ "     END ASC,task_date asc  ;";
+				+ "     END ASC,task_date asc  ; ";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-		preparedStatement.setString(1, user.getMailId());
+		preparedStatement.setInt(1, user.getId());
 		ResultSet resultSet = preparedStatement.executeQuery();
 
 		System.out.println("Tasks for User: " + user.getName());
@@ -59,11 +61,11 @@ public class TaskImpl implements TaskDAO {
 
 	@Override
 	public void updateTaskStatus(Task task) throws ClassNotFoundException, SQLException {
-		String updateQuery = "UPDATE task SET status = ? WHERE id = ? AND user_mail = ?";
+		String updateQuery = "UPDATE task SET status = ? WHERE id = ? AND user_id = ?";
 		PreparedStatement ps = con.prepareStatement(updateQuery);
 		ps.setString(1, task.getStatus());
 		ps.setInt(2, task.getId());
-		ps.setString(3, task.getUsermail());
+		ps.setInt(3, task.getId());
 		int rowsAffected = ps.executeUpdate();
 		if (rowsAffected > 0) {
 			System.out.println(" Task status updated successfully.");
@@ -74,11 +76,11 @@ public class TaskImpl implements TaskDAO {
 	}
 
 	@Override
-	public void deleteTask(int taskid, String usermail) throws ClassNotFoundException, SQLException {
-		String deleteQuery = "DELETE FROM task WHERE id = ? AND user_mail = ?";
+	public void deleteTask(int taskid, int userId) throws ClassNotFoundException, SQLException {
+		String deleteQuery = "DELETE FROM task WHERE id = ? AND user_id = ?";
 		PreparedStatement ps = con.prepareStatement(deleteQuery);
 		ps.setInt(1, taskid);
-		ps.setString(2, usermail);
+		ps.setInt(2, userId);
 		int rowsAffected = ps.executeUpdate();
 		if (rowsAffected > 0) {
 			System.out.println(" Task deleted successfully.");
@@ -90,35 +92,43 @@ public class TaskImpl implements TaskDAO {
 
 	public void displayTodayTasks(User user) throws ClassNotFoundException, SQLException {
 
-		String selectQuery = "SELECT id, name, status,priority, task_date FROM task WHERE user_mail = ? AND  CAST(task_date AS DATE)=? AND status=\"not done\";";
-		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-		preparedStatement.setString(1, user.getMailId());
-		// Get the current date
-		Date currentDate = new Date();
-		java.sql.Date sqlCurrentDate = new java.sql.Date(currentDate.getTime());
-		preparedStatement.setDate(2, sqlCurrentDate);
-		ResultSet resultSet = preparedStatement.executeQuery();
+	    String selectQuery = "SELECT id, name, status, priority, task_date FROM task "
+	            + "WHERE user_id = ? AND CAST(task_date AS DATE) = ? "
+	            + "ORDER BY CASE "
+	            + "     WHEN  priority = 'high' THEN 1 "
+	            + "     WHEN priority = 'medium' THEN 2 "
+	            + "     WHEN priority = 'low' THEN 3 "
+	            + "     END ASC, task_date ASC;";
+	    PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
+	    preparedStatement.setInt(1, user.getId());
+	    // Get the current date
+	    Date currentDate = new Date();
+	    java.sql.Date sqlCurrentDate = new java.sql.Date(currentDate.getTime());
+	    preparedStatement.setDate(2, sqlCurrentDate);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    System.out.println("Tasks for User: " + user.getName() + " on " + sqlCurrentDate);
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+	    while (resultSet.next()) {
+	        int id = resultSet.getInt("id");
+	        String name = resultSet.getString("name");
+	        String status = resultSet.getString("status");
+	        Date taskDate = resultSet.getDate("task_date");
+	        Time taskTime = resultSet.getTime("task_date");
+	        String formattedDate = dateFormat.format(taskDate);
+	        String formattedTime = timeFormat.format(taskTime);
+	        String priority = resultSet.getString("priority");
 
-		System.out.println("Tasks for User: " + user.getName() + " on " + sqlCurrentDate);
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	        System.out.println("[ ID: " + id + ", Task: " + name + ", Status: " + status + ", Priority: " + priority + ", Date: " + formattedDate + ", Time: " + formattedTime + " ]");
 
-		while (resultSet.next()) {
-			int id = resultSet.getInt("id");
-			String name = resultSet.getString("name");
-			String status = resultSet.getString("status");
-			Date date = resultSet.getDate("task_date");
-			String formattedDate = dateFormat.format(date);
-			String priority=resultSet.getString("priority");
-
-			System.out.println("[ ID: " + id + ", Task: " + name + ", Status: " + status +", Priority: " + priority + ", Date: " + formattedDate + " ] ");
-
-		}
+	    }
 	}
+
 	public void displayTasksByDate(String taskdate,User user) throws ClassNotFoundException, SQLException {
 
-		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_mail = ? AND  CAST(task_date AS DATE)=? AND status=\"not done\";";
+		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_id = ? AND  CAST(task_date AS DATE)=? AND status=\"not done\";";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-		preparedStatement.setString(1, user.getMailId());
+		preparedStatement.setInt(1, user.getId());
 		preparedStatement.setString(2, taskdate);
 		ResultSet resultSet = preparedStatement.executeQuery();
 		System.out.println("Tasks for User: " + user.getName() + " on " + taskdate);
@@ -137,9 +147,9 @@ public class TaskImpl implements TaskDAO {
 
 	@Override
 	public void displayTodayAndNext5DaysTasks(User user) throws ClassNotFoundException, SQLException {
-		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_mail = ? AND task_date BETWEEN ? AND ?";
+		String selectQuery = "SELECT id, name, status, task_date FROM task WHERE user_id = ? AND task_date BETWEEN ? AND ?";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
-		preparedStatement.setString(1, user.getMailId());
+		preparedStatement.setInt(1, user.getId());
 		// Get the current date
 		Date currentDate = new Date();
 		java.sql.Date sqlCurrentDate = new java.sql.Date(currentDate.getTime());

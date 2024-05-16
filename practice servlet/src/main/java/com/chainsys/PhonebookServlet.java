@@ -47,9 +47,6 @@ public class PhonebookServlet extends HttpServlet {
 
 		// Add the contact to the ArrayList
 		contacts.add(contact);
-//		response.sendRedirect()
-//		response.sendRedirect("http://localhost:8080/practice_servlet/");  
-//		PrintWriter out = response.getWriter();
 		request.setAttribute("contacts", contacts);
 		request.getRequestDispatcher("viewcontact.jsp").forward(request, response);
 //		out.print("<html><head>");
@@ -71,6 +68,47 @@ public class PhonebookServlet extends HttpServlet {
 //		out.print("</body></html>");
 
 	}
+	private synchronized void deleteContact(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int id =Integer.parseInt(request.getParameter("deleteid"));
+		contacts.remove(id);
+		request.setAttribute("contacts", contacts);
+		request.getRequestDispatcher("viewcontact.jsp").forward(request, response);
+
+	}
+	private synchronized void updateContactdetails(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	    int id = Integer.parseInt(request.getParameter("updateid"));
+	    Contact contact = contacts.get(id);
+	    request.setAttribute("id", id);
+	    request.setAttribute("contact", contact); // Corrected attribute key
+	    request.getRequestDispatcher("editcontact.jsp").forward(request, response);
+	}
+
+	private synchronized void updateContacts(HttpServletRequest request, HttpServletResponse response)
+	        throws ServletException, IOException {
+	    int id = Integer.parseInt(request.getParameter("updateid"));
+	    String name = request.getParameter("name");
+	    String phoneNumber = request.getParameter("phone");
+	    String email = request.getParameter("email");
+	    
+	    // Update the existing contact in the list
+	    Contact contactToUpdate = contacts.get(id);
+	    if (contactToUpdate != null) {
+	        contactToUpdate.setName(name);
+	        contactToUpdate.setPhoneNumber(phoneNumber);
+	        contactToUpdate.setEmail(email);
+	    }
+	  
+	    
+
+	    // Forward to the appropriate JSP
+	    request.setAttribute("contacts", contacts);
+	    request.getRequestDispatcher("viewcontact.jsp").forward(request, response);
+	}
+
+	
+
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -85,9 +123,23 @@ public class PhonebookServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		addContact(request, response);
-
+		 String action = request.getParameter("action");
+	        if (action != null) {
+	            switch (action) {
+	                case "add":
+	                    addContact(request, response);
+	                    break;
+	                case "delete":
+	                    deleteContact(request, response);
+	                    break;
+	                case "updatedetails":
+	                	updateContactdetails(request, response);
+	                case "update":
+	                	updateContacts(request, response);
+	                default:
+	                    // Handle invalid action
+	            }
+	        }
 	}
 
 }

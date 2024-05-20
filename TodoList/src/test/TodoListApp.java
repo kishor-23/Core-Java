@@ -12,16 +12,11 @@ public class TodoListApp {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Scanner sc = new Scanner(System.in);
 		UserDAO userOperations = new UserImpl();
-		TaskDAO taskOperations = new TaskImpl();
-//		HabitImpl habitOperations=new HabitImpl();
 		System.out.println(" *** Welcome to TodoList App *** ");
-		startPage(userOperations, taskOperations);
+		startPage(userOperations);
 	}
 
-	public static void startPage(UserDAO userOperations, TaskDAO taskOperations)
-			throws ClassNotFoundException, SQLException {
-		HabitImpl habitOperations=new HabitImpl();
-		HabitRecordImpl recordOperations=new HabitRecordImpl();
+	public static void startPage(UserDAO userOperations) throws ClassNotFoundException, SQLException {
 		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println(" 1. Sign in");
@@ -51,8 +46,9 @@ public class TodoListApp {
 					System.out.println("Login successful...");
 //					todoTask(user, taskOperations, userOperations);
 //					todoHabit(user,habitOperations,recordOperations);
-					 homepage(user, userOperations);
-					
+					homepage(user, userOperations);
+//					eventReminder(user);
+
 				}
 				System.out.println();
 				break;
@@ -89,6 +85,59 @@ public class TodoListApp {
 		}
 	}
 
+	public static void homepage(User user, UserDAO userOperations) throws ClassNotFoundException, SQLException {
+		TaskDAO taskOperations = new TaskImpl();
+		HabitDAO habitOperations = new HabitImpl();
+		HabitRecordDAO recordOperations = new HabitRecordImpl();
+		Scanner sc = new Scanner(System.in);
+		while (true) {
+			System.out.println(" 1. todo task ");
+			System.out.println(" 2. todo habit");
+			System.out.println(" 3. event reminder");
+			System.out.println(" 4. delete account");
+			System.out.println(" 5. logout");
+
+			System.out.println("Choose an option (1 to 5):");
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				todoTask(user, taskOperations, userOperations);
+
+				break;
+			case "2":
+				todoHabit(user, habitOperations, recordOperations);
+				break;
+			case "3":
+				eventReminder(user);
+				break;
+			case "4":
+				System.out.println("Do you want to delete the account (y/n) ?");
+				String ans = sc.nextLine();
+				while (true) {
+					if (ans.equals("y") || ans.equals("n")) {
+						break;
+					}
+					System.out.println("invalid choose y or n");
+					ans = sc.next();
+
+				}
+				if (ans.equals("y")) {
+					userOperations.deleteUser(user.getId());
+					return;
+				}
+				System.out.println();
+				break;
+			case "5":
+				System.out.println("Good bye....");
+				System.out.println("Logged out successfully.");
+				return;
+			default:
+				System.out.println("Invalid option! Please choose again.");
+			}
+		}
+
+	}
+
 	public static void todoTask(User user, TaskDAO taskOperations, UserDAO userOperations)
 			throws ClassNotFoundException, SQLException {
 		Scanner sc = new Scanner(System.in);
@@ -101,9 +150,8 @@ public class TodoListApp {
 			System.out.println("3. Delete task");
 			System.out.println("4. Display all tasks");
 			System.out.println("5. Display upcoming 5Days Tasks");
-			System.out.println("6. Delete account");
-			System.out.println("7. Display task by date");
-			System.out.println("8. back");
+			System.out.println("6. Display task by date");
+			System.out.println("7. back");
 			System.out.println("Choose an option (1 to 7):");
 			String choice = sc.nextLine();
 			switch (choice) {
@@ -147,31 +195,15 @@ public class TodoListApp {
 				taskOperations.displayTodayAndNext5DaysTasks(user);
 				System.out.println();
 				break;
-			case "6":
-				System.out.println("Do you want to delete the account (y/n) ?");
-				String ans = sc.nextLine();
-				while (true) {
-					if (ans.equals("y") || ans.equals("n")) {
-						break;
-					}
-					System.out.println("invalid choose y or n");
-					ans = sc.next();
 
-				}
-				if (ans.equals("y")) {
-					userOperations.deleteUser(user.getId());
-					return;
-				}
-				System.out.println();
-				break;
-			case "7":
+			case "6":
 				SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 				String date = dateformat.format(Validation.getDate());
 				taskOperations.displayTasksByDate(date, user);
 				break;
 
-			case "8":
-				System.out.println("Logged out successfully.");
+			case "7":
+				System.out.println("back to homepage");
 				System.out.println();
 				return;
 			default:
@@ -179,75 +211,27 @@ public class TodoListApp {
 			}
 		}
 	}
-public static void homepage(User user,UserDAO userOperations) throws ClassNotFoundException, SQLException {
-//	UserDAO userOperations = new UserImpl();
-	TaskDAO taskOperations = new TaskImpl();
-	HabitImpl habitOperations=new HabitImpl();
-	HabitRecordImpl recordOperations=new HabitRecordImpl();
-	Scanner sc = new Scanner(System.in);
-	while (true) {
-		System.out.println(" 1. todo task ");
-		System.out.println(" 2. todo habit");
-		System.out.println(" 3. delete account");
-		System.out.println(" 4. logout");
-		
-		System.out.println("Choose an option (1 to 4):");
-		String choice = sc.nextLine();
-		switch (choice) {
-		case "1":
-			todoTask(user, taskOperations, userOperations);
-			
-			break;
-		case "2":
-			todoHabit(user,habitOperations,recordOperations);
-			break;
-		case "3":
-			System.out.println("Do you want to delete the account (y/n) ?");
-			String ans = sc.nextLine();
-			while (true) {
-				if (ans.equals("y") || ans.equals("n")) {
-					break;
-				}
-				System.out.println("invalid choose y or n");
-				ans = sc.next();
 
-			}
-			if (ans.equals("y")) {
-				userOperations.deleteUser(user.getId());
-				return;
-			}
-			System.out.println();
-			break;
-		case "4":
-			System.out.println("Good bye....");
-			System.out.println("Logged out successfully.");
-			return;
-		default:
-			System.out.println("Invalid option! Please choose again.");
-		}
-	}
-			
-			
-}
-	
-	
-	public static void todoHabit(User user, HabitImpl habitOperations,HabitRecordImpl recordOperations) throws ClassNotFoundException, SQLException {
+	public static void todoHabit(User user, HabitDAO habitOperations, HabitRecordDAO recordOperations)
+			throws ClassNotFoundException, SQLException {
 		Scanner sc = new Scanner(System.in);
 		while (true) {
 			System.out.println("========= habit List =========");
-		    habitOperations.displayAllHabits(user);
+			habitOperations.displayAllHabits(user);
 			System.out.println("==============================");
 			System.out.println("1. Add habit ");
 			System.out.println("2. Add today's habit status");
 			System.out.println("3. view habit tracking history");
-			System.out.println("4. back");
-			System.out.println("Choose an option (1 to 4):");
+			System.out.println("4. delete habit");
+			System.out.println("5. update habit status in record");
+			System.out.println("6. back");
+			System.out.println("Choose an option (1 to 6):");
 			String choice = sc.nextLine();
 			switch (choice) {
 			case "1":
 				System.out.println("Enter a habit:");
 				String habit = sc.nextLine();
-				Habit addhabit = new Habit(user.getId(),habit);
+				Habit addhabit = new Habit(user.getId(), habit);
 				habitOperations.addHabit(addhabit);
 				break;
 			case "2":
@@ -265,24 +249,96 @@ public static void homepage(User user,UserDAO userOperations) throws ClassNotFou
 
 				}
 				if (status.equals("y")) {
-					status="done";
+					status = "done";
+				} else {
+					status = "not done";
 				}
-				else {
-					status="not done";
-				}
-				String date=Validation.getCurrentDate();
-			    HabitRecords record=new HabitRecords(user.getId(),id,date,status);
-			    recordOperations.addHabitRecord(record);
+				String date = Validation.getCurrentDate();
+				HabitRecords record = new HabitRecords(user.getId(), id, date, status);
+				recordOperations.addHabitRecord(record);
 				break;
 			case "3":
-				
+
 				System.out.println("enter habit id");
 				int habitid = Validation.getPositiveInput(sc);
 				sc.nextLine();
-				recordOperations.displayAllHabitRecords(user,habitid);
+				recordOperations.displayAllHabitRecords(user, habitid);
 				System.out.println();
 				break;
+			case "4":
 
+				System.out.println("enter habit id");
+				int habitId = Validation.getPositiveInput(sc);
+				sc.nextLine();
+				habitOperations.deleteHabit(habitId);
+				System.out.println();
+				break;
+			case "5":
+				System.out.println("Enter record id:");
+				int recordid = Validation.getPositiveInput(sc);
+				sc.nextLine();
+				System.out.println("Did you complete it ?(y/n)");
+				String recordStatus = sc.nextLine();
+				while (true) {
+					if (recordStatus.equals("y") || recordStatus.equals("n")) {
+						break;
+					}
+					System.out.println("invalid choose y or n");
+					recordStatus = sc.next();
+
+				}
+				if (recordStatus.equals("y")) {
+					recordStatus = "done";
+				} else {
+					recordStatus = "not done";
+				}
+				recordOperations.updateHabitRecord(recordid, recordStatus);
+				break;
+
+			case "6":
+//				  System.out.println("Exiting the program...");
+//			        System.exit(0); // Exit with status code 0 (success)
+				System.out.println("back to homepage");
+				System.out.println();
+				return;
+			default:
+				System.out.println("Invalid option! Please choose again.");
+			}
+		}
+	}
+
+	public static void eventReminder(User user) throws ClassNotFoundException, SQLException {
+		Scanner sc = new Scanner(System.in);
+		EventImpl eventOperations = new EventImpl();
+		while (true) {
+			System.out.println("========= Event reminder=========");
+			eventOperations.getCurrentMonthEvents(user.getId());
+			System.out.println("==============================");
+			System.out.println("1. Add event ");
+			System.out.println("2. display event");
+			System.out.println("3. delete event");
+			System.out.println("4. back");
+			System.out.println("Choose an option (1 to 4):");
+			String choice = sc.nextLine();
+			switch (choice) {
+			case "1":
+				System.out.println("Enter event name :");
+				String event = sc.nextLine();
+				SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+				String date = dateformat.format(Validation.getDate());
+				Event addevent = new Event(user.getId(), event, date);
+				eventOperations.addEvent(addevent);
+				break;
+			case "2":
+				eventOperations.displayAllEvents(user.getId());
+				break;
+			case "3":
+				System.out.println("enter event id:");
+				int eventid = Validation.getIdPositiveValue();
+				eventOperations.deleteEvent(eventid);
+				break;
+
+			
 			case "4":
 				System.out.println("back to homepage");
 				System.out.println();
@@ -290,6 +346,7 @@ public static void homepage(User user,UserDAO userOperations) throws ClassNotFou
 			default:
 				System.out.println("Invalid option! Please choose again.");
 			}
+				
 		}
 	}
 }

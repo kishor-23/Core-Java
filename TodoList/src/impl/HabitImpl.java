@@ -16,7 +16,6 @@ public class HabitImpl implements HabitDAO {
 	public HabitImpl() throws ClassNotFoundException, SQLException {
 		this.con = Dbconnection.getConnection();
 	}
-	
 	public void addHabit(Habit habit) throws ClassNotFoundException, SQLException {
 		String insertQuery = "insert into Habits(UserID,HabitName) values(?,?)";
 		PreparedStatement preparedStatement = con.prepareStatement(insertQuery);
@@ -26,7 +25,7 @@ public class HabitImpl implements HabitDAO {
 		System.out.println(rows + " habit inserted");
 	}
 	public void displayAllHabits(User user) throws ClassNotFoundException, SQLException {
-		String selectQuery = "select HabitID,HabitName from Habits where userId=? ";
+		String selectQuery = "select eventID,evnt_name,event_date from Habits where userId=? ";
 		PreparedStatement preparedStatement = con.prepareStatement(selectQuery);
 		preparedStatement.setInt(1, user.getId());
 		ResultSet resultSet = preparedStatement.executeQuery();
@@ -37,11 +36,16 @@ public class HabitImpl implements HabitDAO {
 		}
 
 	}
-
 	@Override
-	public void deleteHabits(int habitid) throws ClassNotFoundException, SQLException {
+	public void deleteHabit(int habitid) throws ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 		
+		String insertQuery = "delete from Habits where HabitId= ?";
+		PreparedStatement preparedStatement = con.prepareStatement(insertQuery);
+		preparedStatement.setInt(1, habitid);
+		int rows = preparedStatement.executeUpdate();
+		System.out.println(rows + " habit deleted");
 	}
+	
 
 }

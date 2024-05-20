@@ -4,20 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import dao.HabitRecordDAO;
 import model.HabitRecords;
 import model.User;
 import util.Dbconnection;
 
-public class HabitRecordImpl {
+public class HabitRecordImpl implements HabitRecordDAO{
 	private Connection con;
 
 	public HabitRecordImpl() throws ClassNotFoundException, SQLException {
 		this.con = Dbconnection.getConnection();
 	}
 	public void addHabitRecord(HabitRecords record) throws ClassNotFoundException, SQLException {
-	    // Check if the record already exists
+	    // Check if the habit record already exists
 	    String selectQuery = "SELECT COUNT(*) FROM Records WHERE userId = ? AND habitId = ? AND record_date = ?";
+	    //check if habit id exists or not
 	    String select2Query = "SELECT COUNT(*) FROM Habits WHERE userId = ? AND HabitID = ? ";
 	    PreparedStatement selectStatement = con.prepareStatement(selectQuery);
 	    PreparedStatement ss = con.prepareStatement(select2Query);
@@ -44,12 +45,18 @@ public class HabitRecordImpl {
 	        int rows = preparedStatement.executeUpdate();
 	        System.out.println(rows + " habit record inserted");
 	    } else {
-	        System.out.println("Record already exists");
+	    	if(found==0) {
+	    		System.out.println("Not found !");
+	    	}
+	    	else {
+	    		 System.out.println("Record already exists");
+	    	}
+	       
 	    }
 	}
 
 	public void displayAllHabitRecords(User user, int habitid) throws ClassNotFoundException, SQLException {
-	    String selectQuery = "SELECT Records.HabitId, Habits.HabitName, Records.record_date, Records.status "
+	    String selectQuery = "SELECT Records.RecordId, Habits.HabitName, Records.record_date, Records.status "
 	            + "FROM Records "
 	            + "INNER JOIN Habits ON Records.habitId = Habits.HabitID "
 	            + "WHERE Records.userId = ? AND Records.habitId = ?";
@@ -58,13 +65,36 @@ public class HabitRecordImpl {
 	    preparedStatement.setInt(2, habitid);
 	    ResultSet resultSet = preparedStatement.executeQuery();
 
+	    boolean found = false; // Flag to track if records are found
+
 	    while (resultSet.next()) {
-	        int id = resultSet.getInt("HabitId");
+	        found = true; // Records found
+	        int id = resultSet.getInt("RecordId");
 	        String name = resultSet.getString("HabitName");
 	        String date = resultSet.getString("record_date");
 	        String status = resultSet.getString("status");
-	        System.out.println("[ ID: " + id + ", Habit: " + name + ", Date: " + date + " status: " + status + " ]");
+	        System.out.println("[ Record ID: " + id + ", Habit: " + name + ", Date: " + date + " status: " + status + " ]");
+	    }
+
+	    if (!found) {
+	        System.out.println("No records found.");
 	    }
 	}
+	public void updateHabitRecord(int recordid,String status) throws ClassNotFoundException, SQLException {
+	    String updateQuery = "UPDATE Records SET status = ? WHERE RecordID = ?";
+	    PreparedStatement preparedStatement = con.prepareStatement(updateQuery);
+	    preparedStatement.setString(1, status);
+	    preparedStatement.setInt(2, recordid);
+	    
+	    int rows = preparedStatement.executeUpdate();
+	    
+	    if (rows > 0) {
+	        System.out.println("Record updated successfully.");
+	    } else {
+	        System.out.println("No record found with the given ID.");
+	    }
+	}
+
+
 
 }

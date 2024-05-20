@@ -32,13 +32,26 @@ SELECT id,name,status,task_date FROM todo_task WHERE user_id =2;
 
 ```
 
+#### Select tasks and order them by priority
+
+```sql
+SELECT id, name, status,priority, task_date  FROM task
+WHERE user_id = 1 and CAST(task_date AS DATE)="2024-05-08"
+ORDER BY CASE 
+     WHEN  priority = "high" THEN 1
+     WHEN priority = "medium" THEN 2
+     WHEN priority = "low" THEN 3
+     END ASC,task_date asc  ;
+```
+
+
 
 ####   Result
 
 
-   | ID       |    NAME                     | status    | task-date   | 
-   |----------|-----------------------------|-----------|-------------|
-   | 2        | net practice for batting    | done      | 2024-05-02  | 
-   | 3        | practice for wicket-keeping | Not done  | 2024-05-02  | 
+   | ID       |    NAME                     | status    | task-date   | priority |
+   |----------|-----------------------------|-----------|-------------|----------|
+   | 2        | net practice for batting    | done      | 2024-05-02  | high     |
+   | 3        | practice for wicket-keeping | Not done  | 2024-05-02  | medium   |
 
 

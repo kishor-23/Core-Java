@@ -45,3 +45,11 @@ ORDER BY CASE
      WHEN priority = "medium" THEN 2
      WHEN priority = "low" THEN 3
      END ASC,task_date asc  ;
+ 
+     
+ CREATE TABLE events (
+    eventid INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT NOT NULL,
+    event_name VARCHAR(255) NOT NULL,
+    event_date DATE NOT NULL
+);

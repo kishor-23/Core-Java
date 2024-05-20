@@ -17,7 +17,7 @@ public class Validation {
 
 	public static Date getDate() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		dateFormat.setLenient(false); // Rejects invalid dates like 2024-02-31
+		dateFormat.setLenient(false); // Rejects invalid dates like 22-05-2024
 
 		Date date = null;
 		while (date == null) {
@@ -90,8 +90,7 @@ public class Validation {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
 		dateFormat.setLenient(false); // Rejects invalid dates like 2024-02-31
 
-		Date currentDate = new Date();
-		// Get current date
+		Date currentDate = new Date();// Get current date
 		Date date = null;
 		Scanner scanner = new Scanner(System.in);
 		String currentdate = dateFormat.format(currentDate);

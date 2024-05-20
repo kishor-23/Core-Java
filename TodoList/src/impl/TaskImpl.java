@@ -65,7 +65,7 @@ public class TaskImpl implements TaskDAO {
 		PreparedStatement ps = con.prepareStatement(updateQuery);
 		ps.setString(1, task.getStatus());
 		ps.setInt(2, task.getId());
-		ps.setInt(3, task.getId());
+		ps.setInt(3, task.getUserId());
 		int rowsAffected = ps.executeUpdate();
 		if (rowsAffected > 0) {
 			System.out.println(" Task status updated successfully.");
@@ -139,9 +139,8 @@ public class TaskImpl implements TaskDAO {
 			String status = resultSet.getString("status");
 			Date date = resultSet.getDate("task_date");
 			String formattedDate = dateFormat.format(date);
-			String priority=resultSet.getString("priority");
 			System.out.println(
-					"[ ID: " + id + ", Task: " + name + ", Status: " + status +", Priority: " + priority+ ", Date: " + formattedDate + " ] ");
+					"[ ID: " + id + ", Task: " + name + ", Status: " + status +" , Date: " + formattedDate + " ] ");
 		}
 	}
 

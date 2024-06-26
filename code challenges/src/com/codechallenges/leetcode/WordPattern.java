@@ -26,7 +26,7 @@ public class WordPattern {
         return true;
     }
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		String pattern = "abba";
 		String s = "dog cat cat dog";
 		System.out.println(wordPattern(pattern, s));

@@ -5,7 +5,7 @@ import java.util.HashMap;
 class FrequencyOfLettersInWord {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
 		String word="ababc";
 		HashMap<Character,Integer> hp=new HashMap<>();
 		for(int i=0;i<word.length();i++) {
